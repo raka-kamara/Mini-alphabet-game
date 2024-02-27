@@ -1,11 +1,18 @@
 
+const audio = new Audio();
 
+let isGamePlayOn = false;
+
+const artBoard = document.getElementById("artboard");
 
 function handleKeyboardButtonPress(event){
     const playerPressed = event.key;
 
+    if (isGamePlayOn == false) return;
+
     if(playerPressed === 'Escape'){
         gameOver();
+      
     }
     
     // get random alphabet
@@ -20,6 +27,12 @@ function handleKeyboardButtonPress(event){
         const currentScore = getTextElementValueById('current-score');
         const updatedScore = currentScore + 1;
 
+        
+        audio.src = "../audio/success.mp3";
+        audio.play();
+
+        
+
         setTextElementValueById('current-score', updatedScore);
 
          removeBackgroundColorById(expectedAlphabet);
@@ -28,10 +41,17 @@ function handleKeyboardButtonPress(event){
      else{
         console.log('Oh no!!');
 
-       const currentLife = getTextElementValueById('current-life');
+        const currentLife = getTextElementValueById('current-life');
         const updatedLife = currentLife - 1;
 
+        const updatedLifePercentage = (updatedLife / 5) * 100;
+
+        
+
         setTextElementValueById('current-life', updatedLife);
+
+        audio.src = "../audio/wrong-answer.mp3";
+        audio.play();
 
         if(updatedLife === 0){
             gameOver();
@@ -66,6 +86,10 @@ function continueGame(){
 }
 
 function play(){
+
+    isGamePlayOn = true;
+
+
     hidElementById('home-screen');
     hidElementById('final-score')
     showElementById('play-ground');
@@ -77,6 +101,9 @@ function play(){
 }
 
 function gameOver(){
+
+    isGamePlayOn = false;
+
     hidElementById('play-ground');
     showElementById('final-score');
 
